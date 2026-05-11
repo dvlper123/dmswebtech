@@ -1,0 +1,146 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Profit & Loss Report - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-gradient" style="background: linear-gradient(135deg, var(--primary-green), var(--light-green));">
+        <h3 class="mb-0" style="color: var(--white);">
+            <i class="fas fa-chart-line me-2"></i>Profit & Loss Report
+        </h3>
+    </div>
+    <div class="card-body">
+        <!-- Filter Form -->
+        <div class="row mb-4 p-3 bg-light rounded">
+            <div class="col-md-12 mb-3">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link {% if report_type == 'daily' %}active{% endif %}" href="?type=daily">Daily</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if report_type == 'monthly' %}active{% endif %}" href="?type=monthly">Monthly</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if report_type == 'yearly' %}active{% endif %}" href="?type=yearly">Yearly</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-12">
+                {% if report_type == 'daily' %}
+                <form method="get" class="row g-3">
+                    <input type="hidden" name="type" value="daily">
+                    <div class="col-md-6">
+                        <input type="date" class="form-control" name="date" id="date" value="{{ request.GET.date }}">
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-1"></i>Generate Report
+                        </button>
+                    </div>
+                </form>
+                {% elif report_type == 'monthly' %}
+                <form method="get" class="row g-3">
+                    <input type="hidden" name="type" value="monthly">
+                    <div class="col-md-3">
+                        <select class="form-control" name="month" id="month">
+                            <option value="">Select Month</option>
+                            {% for i in "123456789101112" %}
+                            <option value="{{ i }}" {% if request.GET.month == i %}selected{% endif %}>
+                                {% if i == "1" %}January{% elif i == "2" %}February{% elif i == "3" %}March{% elif i == "4" %}April{% elif i == "5" %}May{% elif i == "6" %}June{% elif i == "7" %}July{% elif i == "8" %}August{% elif i == "9" %}September{% elif i == "10" %}October{% elif i == "11" %}November{% else %}December{% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" name="year" value="{{ request.GET.year }}" placeholder="Year" min="2000" max="2100">
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-1"></i>Generate Report
+                        </button>
+                    </div>
+                </form>
+                {% else %}
+                <form method="get" class="row g-3">
+                    <input type="hidden" name="type" value="yearly">
+                    <div class="col-md-6">
+                        <input type="number" class="form-control" name="year" value="{{ request.GET.year }}" placeholder="Enter Year" min="2000" max="2100">
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-1"></i>Generate Report
+                        </button>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Report Display -->
+        {% if error %}
+        <div class="alert alert-warning" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+        </div>
+        {% elif total_income %}
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="card" style="border-left: 4px solid #28a745;">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted">Total Income</h6>
+                        <h3 class="text-success">₹{{ total_income|floatformat:2 }}</h3>
+                        <small class="text-muted">From completed payments</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card" style="border-left: 4px solid #dc3545;">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted">Total Expenses</h6>
+                        <h3 class="text-danger">₹{{ total_expense|floatformat:2 }}</h3>
+                        <small class="text-muted">All expenses for the period</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card" style="border-left: 4px solid {% if net_profit >= 0 %}#007bff{% else %}#dc3545{% endif %};">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted">Net Profit/Loss</h6>
+                        <h3 class="{% if net_profit >= 0 %}text-primary{% else %}text-danger{% endif %}">
+                            ₹{{ net_profit|floatformat:2 }}
+                        </h3>
+                        <small class="text-muted">
+                            {% if net_profit >= 0 %}
+                            <i class="fas fa-arrow-up text-success me-1"></i>Profit
+                            {% else %}
+                            <i class="fas fa-arrow-down text-danger me-1"></i>Loss
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-muted">Report Period:</h6>
+                    {% if report_type == 'daily' %}
+                    <p><strong>{{ date|date:'F d, Y' }}</strong></p>
+                    {% elif report_type == 'monthly' %}
+                    <p><strong>{{ month }}</strong></p>
+                    {% else %}
+                    <p><strong>{{ year }}</strong></p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 text-end">
+                    <button class="btn btn-outline-primary" onclick="window.print()">
+                        <i class="fas fa-print me-1"></i>Print Report
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

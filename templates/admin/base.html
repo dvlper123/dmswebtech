@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2d5a27;
+            --light-green: #4a7c59;
+            --accent-green: #6b9e78;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--white) !important;
+        }
+
+        .nav-link {
+            color: var(--white) !important;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-green) !important;
+            transform: translateY(-1px);
+        }
+
+        .sidebar {
+            background: var(--white);
+            min-height: calc(100vh - 76px);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar .nav-link {
+            color: var(--dark-gray) !important;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 5px 10px;
+            transition: all 0.3s ease;
+        }
+
+        .offcanvas {
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .offcanvas-header {
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .offcanvas .nav-link {
+            color: var(--dark-gray) !important;
+            background: #f6faf5;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            padding: 12px 16px;
+            transition: all 0.2s ease;
+        }
+
+        .offcanvas .nav-link:hover,
+        .offcanvas .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: var(--white) !important;
+        }
+
+        .offcanvas .btn-danger {
+            border-radius: 14px;
+            padding: 12px 16px;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar {
+                padding: 0.5rem 1rem;
+            }
+
+            .login-card,
+            .card {
+                margin-bottom: 1.5rem;
+            }
+
+            .sidebar {
+                min-height: auto;
+                box-shadow: none;
+            }
+
+            .card {
+                border-radius: 20px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .nav-link {
+                font-size: 0.95rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+            .sidebar .nav-link {
+                padding: 10px 14px;
+                margin: 6px 0;
+            }
+
+            .content-wrapper {
+                padding: 1rem 0.5rem;
+            }
+
+            .stats-card, .card {
+                box-shadow: none;
+            }
+
+            .stats-card {
+                padding: 16px;
+            }
+
+            .card {
+                border-radius: 18px;
+            }
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: var(--accent-green);
+            color: var(--white) !important;
+            transform: translateX(5px);
+        }
+
+        .sidebar .nav-link.active {
+            background-color: var(--primary-green);
+            color: var(--white) !important;
+        }
+
+        .sidebar-heading {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: rgba(45, 90, 39, 0.1);
+            border-radius: 8px;
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            border-radius: 10px;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light-green);
+            color: var(--white) !important;
+        }
+
+        .dropdown-item.active {
+            background-color: var(--primary-green);
+            color: var(--white) !important;
+        }
+
+        .sidebar-heading:hover {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green)) !important;
+            color: var(--white) !important;
+        }
+
+        .sidebar-heading:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .collapse.show + .sidebar-heading .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            border: none;
+            border-radius: 25px;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--light-green), var(--accent-green));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(45, 90, 39, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            border: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: var(--white);
+            border: none;
+            font-weight: 600;
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: var(--white);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .stats-card h3 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stats-card p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.2rem rgba(45, 90, 39, 0.25);
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .badge {
+            border-radius: 20px;
+            padding: 5px 12px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'admin_dashboard' %}">
+                <i class="fas fa-leaf me-2"></i>Company Admin
+            </a>
+            <button class="btn btn-outline-light d-lg-none me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+                <i class="fas fa-bars"></i>
+            </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="companyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-building me-1"></i>Company
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="companyDropdown">
+                            <li><a class="dropdown-item {% if request.resolver_match.url_name == 'edit_company_info' %}active{% endif %}" href="{% url 'edit_company_info' %}">
+                                <i class="fas fa-edit me-2"></i>Company Info
+                            </a></li>
+                            <li><a class="dropdown-item {% if request.resolver_match.url_name == 'admin_contacts' %}active{% endif %}" href="{% url 'admin_contacts' %}">
+                                <i class="fas fa-envelope me-2"></i>Contacts
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cogs me-1"></i>Services
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                            <li><a class="dropdown-item {% if request.resolver_match.url_name == 'admin_services' %}active{% endif %}" href="{% url 'admin_services' %}">
+                                <i class="fas fa-list me-2"></i>View Services
+                            </a></li>
+                            <li><a class="dropdown-item {% if request.resolver_match.url_name == 'add_service' %}active{% endif %}" href="{% url 'add_service' %}">
+                                <i class="fas fa-plus me-2"></i>Add Service
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="testimonialsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-star me-1"></i>Testimonials
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="testimonialsDropdown">
+                            <li><a class="dropdown-item {% if request.resolver_match.url_name == 'admin_testimonials' %}active{% endif %}" href="{% url 'admin_testimonials' %}">
+                                <i class="fas fa-list me-2"></i>View Testimonials
+                            </a></li>
+                            <li><a class="dropdown-item {% if request.resolver_match.url_name == 'add_testimonial' %}active{% endif %}" href="{% url 'add_testimonial' %}">
+                                <i class="fas fa-plus me-2"></i>Add Testimonial
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/">
+                            <i class="fas fa-user-shield me-1"></i>Django Admin
+                        </a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">
+                            <i class="fas fa-sign-out-alt me-1"></i>Logout
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+        <div class="offcanvas-header" style="background: linear-gradient(135deg, var(--primary-green), var(--light-green)); color: var(--white);">
+            <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">Menu</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="nav flex-column">
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}" href="{% url 'admin_dashboard' %}">
+                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                </li>
+                
+                <!-- Company Section -->
+                <li class="nav-item">
+                    <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#companyCollapseMobile" 
+                            aria-expanded="{% if request.resolver_match.url_name in 'edit_company_info,admin_contacts' %}true{% else %}false{% endif %}"
+                            style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                        <span><i class="fas fa-building me-2"></i>Company</span>
+                        <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                    </button>
+                    <div class="collapse {% if request.resolver_match.url_name in 'edit_company_info,admin_contacts' %}show{% endif %}" id="companyCollapseMobile">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'edit_company_info' %}active{% endif %}" href="{% url 'edit_company_info' %}">
+                                    <i class="fas fa-edit me-2"></i>Company Info
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'admin_contacts' %}active{% endif %}" href="{% url 'admin_contacts' %}">
+                                    <i class="fas fa-envelope me-2"></i>Contacts
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                
+                <!-- Services Section -->
+                <li class="nav-item">
+                    <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#servicesCollapseMobile" 
+                            aria-expanded="{% if request.resolver_match.url_name in 'admin_services,add_service' %}true{% else %}false{% endif %}"
+                            style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                        <span><i class="fas fa-cogs me-2"></i>Services</span>
+                        <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                    </button>
+                    <div class="collapse {% if request.resolver_match.url_name in 'admin_services,add_service' %}show{% endif %}" id="servicesCollapseMobile">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'admin_services' %}active{% endif %}" href="{% url 'admin_services' %}">
+                                    <i class="fas fa-list me-2"></i>View Services
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'add_service' %}active{% endif %}" href="{% url 'add_service' %}">
+                                    <i class="fas fa-plus me-2"></i>Add Service
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                
+                <!-- Testimonials Section -->
+                <li class="nav-item">
+                    <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#testimonialsCollapseMobile" 
+                            aria-expanded="{% if request.resolver_match.url_name in 'admin_testimonials,add_testimonial' %}true{% else %}false{% endif %}"
+                            style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                        <span><i class="fas fa-star me-2"></i>Testimonials</span>
+                        <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                    </button>
+                    <div class="collapse {% if request.resolver_match.url_name in 'admin_testimonials,add_testimonial' %}show{% endif %}" id="testimonialsCollapseMobile">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'admin_testimonials' %}active{% endif %}" href="{% url 'admin_testimonials' %}">
+                                    <i class="fas fa-list me-2"></i>View Testimonials
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'add_testimonial' %}active{% endif %}" href="{% url 'add_testimonial' %}">
+                                    <i class="fas fa-plus me-2"></i>Add Testimonial
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                
+                {% if request.user.is_authenticated %}
+                <li class="nav-item mt-4">
+                    <a class="btn btn-danger w-100" href="{% url 'logout' %}">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 d-none d-lg-block sidebar p-3">
+                <h5 class="text-center mb-4" style="color: var(--primary-green);">
+                    <i class="fas fa-bars me-2"></i>Menu
+                </h5>
+                <ul class="nav flex-column">
+                    <!-- Dashboard -->
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}" href="{% url 'admin_dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    
+                    <!-- Company Section -->
+                    <li class="nav-item">
+                        <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#companyCollapse" 
+                                aria-expanded="{% if request.resolver_match.url_name in 'edit_company_info,admin_contacts' %}true{% else %}false{% endif %}"
+                                style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                            <span><i class="fas fa-building me-2"></i>Company</span>
+                            <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                        </button>
+                        <div class="collapse {% if request.resolver_match.url_name in 'edit_company_info,admin_contacts' %}show{% endif %}" id="companyCollapse">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'edit_company_info' %}active{% endif %}" href="{% url 'edit_company_info' %}">
+                                        <i class="fas fa-edit me-2"></i>Company Info
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_contacts' %}active{% endif %}" href="{% url 'admin_contacts' %}">
+                                        <i class="fas fa-envelope me-2"></i>Contacts
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    <!-- Services Section -->
+                    <li class="nav-item">
+                        <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#servicesCollapse" 
+                                aria-expanded="{% if request.resolver_match.url_name in 'admin_services,add_service' %}true{% else %}false{% endif %}"
+                                style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                            <span><i class="fas fa-cogs me-2"></i>Services</span>
+                            <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                        </button>
+                        <div class="collapse {% if request.resolver_match.url_name in 'admin_services,add_service' %}show{% endif %}" id="servicesCollapse">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_services' %}active{% endif %}" href="{% url 'admin_services' %}">
+                                        <i class="fas fa-list me-2"></i>View Services
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'add_service' %}active{% endif %}" href="{% url 'add_service' %}">
+                                        <i class="fas fa-plus me-2"></i>Add Service
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    <!-- Testimonials Section -->
+                    <li class="nav-item">
+                        <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#testimonialsCollapse" 
+                                aria-expanded="{% if request.resolver_match.url_name in 'admin_testimonials,add_testimonial' %}true{% else %}false{% endif %}"
+                                style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                            <span><i class="fas fa-star me-2"></i>Testimonials</span>
+                            <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                        </button>
+                        <div class="collapse {% if request.resolver_match.url_name in 'admin_testimonials,add_testimonial' %}show{% endif %}" id="testimonialsCollapse">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_testimonials' %}active{% endif %}" href="{% url 'admin_testimonials' %}">
+                                        <i class="fas fa-list me-2"></i>View Testimonials
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'add_testimonial' %}active{% endif %}" href="{% url 'add_testimonial' %}">
+                                        <i class="fas fa-plus me-2"></i>Add Testimonial
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Clients Section -->
+                    <li class="nav-item">
+                        <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#clientsCollapse" 
+                                aria-expanded="{% if request.resolver_match.url_name in 'admin_clients,add_client' %}true{% else %}false{% endif %}"
+                                style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                            <span><i class="fas fa-users me-2"></i>Clients</span>
+                            <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                        </button>
+                        <div class="collapse {% if request.resolver_match.url_name in 'admin_clients,add_client' %}show{% endif %}" id="clientsCollapse">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_clients' %}active{% endif %}" href="{% url 'admin_clients' %}">
+                                        <i class="fas fa-list me-2"></i>View Clients
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'add_client' %}active{% endif %}" href="{% url 'add_client' %}">
+                                        <i class="fas fa-plus me-2"></i>Add Client
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- Payments Section -->
+                    <li class="nav-item">         
+                        <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading" 
+                                data-bs-toggle="collapse" 
+                                data-bs-target="#paymentsCollapse" 
+                                aria-expanded="{% if request.resolver_match.url_name in 'admin_payments,add_payment' %}true{% else %}false{% endif %}"
+                                style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                            <span><i class="fas fa-credit-card me-2"></i>Payments</span>
+                            <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                        </button>
+                        <div class="collapse {% if request.resolver_match.url_name in 'admin_payments,add_payment' %}show{% endif %}" id="paymentsCollapse">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_payments' %}active{% endif %}" href="{% url 'admin_payments' %}">
+                                        <i class="fas fa-list me-2"></i>View Payments
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'add_payment' %}active{% endif %}" href="{% url 'add_payment' %}">
+                                        <i class="fas fa-plus me-2"></i>Add Payment
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- Expenses Section -->
+                    <li class="nav-item">
+                        <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#expensesCollapse"
+                                aria-expanded="{% if request.resolver_match.url_name in 'admin_expenses,add_expense' %}true{% else %}false{% endif %}"
+                                style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                            <span><i class="fas fa-shopping-cart me-2"></i>Expenses</span>
+                            <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                        </button>
+                        <div class="collapse {% if request.resolver_match.url_name in 'admin_expenses,add_expense' %}show{% endif %}" id="expensesCollapse">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'admin_expenses' %}active{% endif %}" href="{% url 'admin_expenses' %}">
+                                        <i class="fas fa-list me-2"></i>View Expenses
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'add_expense' %}active{% endif %}" href="{% url 'add_expense' %}">
+                                        <i class="fas fa-plus me-2"></i>Add Expense
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- Reports Section -->
+                    <li class="nav-item">
+                        <button class="btn btn-link nav-link text-start p-3 w-100 d-flex align-items-center justify-content-between sidebar-heading"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#reportsCollapse"
+                                aria-expanded="{% if request.resolver_match.url_name == 'profit_loss_report' %}true{% else %}false{% endif %}"
+                                style="color: var(--primary-green); font-weight: 600; font-size: 0.85rem; text-decoration: none; background: rgba(45, 90, 39, 0.1); border-radius: 8px;">
+                            <span><i class="fas fa-chart-line me-2"></i>Reports</span>
+                            <i class="fas fa-chevron-down toggle-icon" style="font-size: 0.7rem;"></i>
+                        </button>
+                        <div class="collapse {% if request.resolver_match.url_name == 'profit_loss_report' %}show{% endif %}" id="reportsCollapse">
+                            <ul class="nav flex-column ms-3">
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.url_name == 'profit_loss_report' %}active{% endif %}" href="{% url 'profit_loss_report' %}">
+                                        <i class="fas fa-file-alt me-2"></i>Profit/Loss Report
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-12 col-lg-10 p-4 content-wrapper">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Handle sidebar collapse toggle icons
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to toggle chevron rotation
+            function toggleChevron(collapseElement) {
+                const button = collapseElement.previousElementSibling;
+                const icon = button.querySelector('.toggle-icon');
+                if (collapseElement.classList.contains('show')) {
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    icon.style.transform = 'rotate(0deg)';
+                }
+            }
+
+            // Add event listeners to all collapse elements
+            const collapses = document.querySelectorAll('.collapse');
+            collapses.forEach(function(collapse) {
+                collapse.addEventListener('shown.bs.collapse', function() {
+                    toggleChevron(this);
+                });
+                collapse.addEventListener('hidden.bs.collapse', function() {
+                    toggleChevron(this);
+                });
+            });
+        });
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

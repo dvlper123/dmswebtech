@@ -1,0 +1,69 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Edit Testimonial - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 style="color: var(--primary-green);">
+            <i class="fas fa-edit me-2"></i>Edit Testimonial
+        </h2>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--primary-green), var(--light-green)); color: var(--white);">
+                <h5 class="mb-0">
+                    <i class="fas fa-star me-2"></i>Edit Testimonial Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name *</label>
+                        <input type="text" class="form-control" id="name" name="name" required value="{{ testimonial.name }}" placeholder="Enter reviewer name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role *</label>
+                        <input type="text" class="form-control" id="role" name="role" required value="{{ testimonial.role }}" placeholder="e.g., CEO, Founder, Marketing Lead">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="company" class="form-label">Company</label>
+                        <input type="text" class="form-control" id="company" name="company" value="{{ testimonial.company }}" placeholder="Optional company name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="feedback" class="form-label">Feedback *</label>
+                        <textarea class="form-control" id="feedback" name="feedback" rows="5" required placeholder="Write the testimonial message">{{ testimonial.feedback }}</textarea>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active" {% if testimonial.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="is_active">Active Testimonial</label>
+                        <div class="form-text">Uncheck to hide this testimonial from public view.</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Testimonial
+                        </button>
+                        <a href="{% url 'admin_testimonials' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                        <a href="{% url 'delete_testimonial' testimonial.id %}" class="btn btn-danger ms-auto"
+                           onclick="return confirm('Are you sure you want to delete this testimonial?')">
+                            <i class="fas fa-trash me-2"></i>Delete Testimonial
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

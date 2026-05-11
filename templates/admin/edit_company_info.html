@@ -1,0 +1,108 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Edit Company Information - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 style="color: var(--primary-green);">
+            <i class="fas fa-building me-2"></i>Edit Company Information
+        </h2>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--primary-green), var(--light-green)); color: var(--white);">
+                <h5 class="mb-0">
+                    <i class="fas fa-building me-2"></i>Company Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="company_name" class="form-label">Company Name *</label>
+                                <input type="text" class="form-control" id="company_name" name="company_name" required
+                                       value="{{ company_info.company_name }}" placeholder="Enter company name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="email" name="email" required
+                                       value="{{ company_info.email }}" placeholder="Enter contact email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone *</label>
+                                <input type="text" class="form-control" id="phone" name="phone" required
+                                       value="{{ company_info.phone }}" placeholder="Enter phone number">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location *</label>
+                                <input type="text" class="form-control" id="location" name="location" required
+                                       value="{{ company_info.location }}" placeholder="Enter location">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="website" class="form-label">Website</label>
+                        <input type="url" class="form-control" id="website" name="website"
+                               value="{{ company_info.website }}" placeholder="https://example.com">
+                        <div class="form-text">Optional: Enter company website URL</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="hero_title" class="form-label">Hero Title</label>
+                        <input type="text" class="form-control" id="hero_title" name="hero_title"
+                               value="{{ company_info.hero_title }}" placeholder="Primary hero headline for the website">
+                        <div class="form-text">Optional: Main headline displayed on homepage</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="hero_subtitle" class="form-label">Hero Subtitle</label>
+                        <input type="text" class="form-control" id="hero_subtitle" name="hero_subtitle"
+                               value="{{ company_info.hero_subtitle }}" placeholder="Subtitle displayed below the hero title">
+                        <div class="form-text">Optional: Subtitle for homepage hero section</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4"
+                                  placeholder="Short description displayed on the contact or about sections">{{ company_info.description }}</textarea>
+                        <div class="form-text">Optional: Brief company description</div>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active"
+                               {% if company_info.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="is_active">Active Company Info</label>
+                        <div class="form-text">Uncheck to deactivate this company information</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Company Information
+                        </button>
+                        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

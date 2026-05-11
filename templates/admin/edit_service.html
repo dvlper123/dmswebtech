@@ -1,0 +1,131 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Edit Service - Admin Panel{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 style="color: var(--primary-green);">
+            <i class="fas fa-edit me-2"></i>Edit Service
+        </h2>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header" style="background: linear-gradient(135deg, var(--primary-green), var(--light-green)); color: var(--white);">
+                <h5 class="mb-0">
+                    <i class="fas fa-cog me-2"></i>Edit Service Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Service Title *</label>
+                        <input type="text" class="form-control" id="title" name="title" required
+                               value="{{ service.title }}" placeholder="Enter service title">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description *</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required
+                                  placeholder="Describe the service in detail">{{ service.description }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="highlights" class="form-label">Service Highlights</label>
+                        <textarea class="form-control" id="highlights" name="highlights" rows="3"
+                                  placeholder="Enter key points or benefits, one per line">{{ service.highlights }}</textarea>
+                        <div class="form-text">Optional: Add bullet-style highlights for the service detail page.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Service Image</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        <div class="form-text">Optional: Upload a new image to replace the current one</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Price ($)</label>
+                                <input type="number" class="form-control" id="price" name="price" step="0.01" min="0"
+                                       value="{{ service.price }}" placeholder="0.00">
+                                <div class="form-text">Optional: Leave empty if price varies</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="duration" class="form-label">Duration</label>
+                                <input type="text" class="form-control" id="duration" name="duration"
+                                       value="{{ service.duration }}" placeholder="e.g., 2 hours, 1 day, 1 week">
+                                <div class="form-text">Optional: How long does this service take?</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active" name="is_active"
+                               {% if service.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="is_active">
+                            Active Service
+                        </label>
+                        <div class="form-text">Uncheck to hide this service from public view</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Service
+                        </button>
+                        <a href="{% url 'admin_services' %}" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i>Cancel
+                        </a>
+                        <a href="{% url 'delete_service' service.id %}" class="btn btn-danger ms-auto"
+                           onclick="return confirm('Are you sure you want to delete this service?')">
+                            <i class="fas fa-trash me-2"></i>Delete Service
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Service Preview -->
+        <div class="card mt-4">
+            <div class="card-header bg-light">
+                <h6 class="mb-0">
+                    <i class="fas fa-eye me-2"></i>Service Preview
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if service.image %}
+                            <img src="{{ service.image.url }}" class="img-fluid rounded" alt="{{ service.title }}">
+                        {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 150px;">
+                                <i class="fas fa-image fa-2x text-muted"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <h5>{{ service.title }}</h5>
+                        <p>{{ service.description }}</p>
+                        {% if service.price %}
+                            <p><strong>Price:</strong> ${{ service.price }}</p>
+                        {% endif %}
+                        {% if service.duration %}
+                            <p><strong>Duration:</strong> {{ service.duration }}</p>
+                        {% endif %}
+                        <span class="badge {% if service.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                            {% if service.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
