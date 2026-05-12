@@ -22,19 +22,19 @@ export function getServices() {
 }
 
 export function getServiceBySlug(slug) {
-  return fetchJson(`${API_ROOT}/services/${slug}/`);
+  return fetchJson(`${API_ROOT}/api/services/${slug}/`);
 }
 
 export function getTestimonials() {
-  return fetchJson(`${API_ROOT}/testimonials/`);
+  return fetchJson(`${API_ROOT}/api/testimonials/`);
 }
 
 export function getCompanyInfo() {
-  return fetchJson(`${API_ROOT}/company-info/`);
+  return fetchJson(`${API_ROOT}/api/company-info/`);
 }
 
 export function submitContact(data) {
-  return fetchJson(`${API_ROOT}/contacts/`, {
+  return fetchJson(`${API_ROOT}/api/contacts/`, {
     method: 'POST',
     body: JSON.stringify(data),
   });
