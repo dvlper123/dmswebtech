@@ -68,7 +68,7 @@ function Home() {
             <Link to="/services" className="button button-outline">Explore Services</Link>
           </div>
         </div>
-        <div className="hero-visual col-lg-6 col-12">
+        <div className="hero-visual col-lg-6 col-12 d-sm-none">
           <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="IT Company" />
         </div>
       </section>
