@@ -126,8 +126,8 @@ function Home() {
         </div>
       </section>
 
-      <section className="stats-cta-section">
-        <div className="stats-panel">
+      <section className="stats-cta-section row">
+        <div className="stats-panel col-lg-6 col-12">
           <div>
             <h3>120+</h3>
             <p>Projects delivered</p>
@@ -141,7 +141,7 @@ function Home() {
             <p>Industry experience</p>
           </div>
         </div>
-        <div className="cta-panel">
+        <div className="cta-panel col-lg-6 col-12">
           <h2>Ready to launch your next digital product?</h2>
           <p>Work with a team that blends design, development, and marketing into one streamlined experience.</p>
           <Link to="/contact" className="button button-primary">Start Your Project</Link>
