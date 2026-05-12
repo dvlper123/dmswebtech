@@ -111,13 +111,15 @@ function Home() {
           <span className="eyebrow">Portfolio</span>
           <h2>Selected work that showcases our creative and technical strength.</h2>
         </div>
-        <div className="portfolio-grid">
+        <div className="portfolio-grid row">
           {portfolioItems.map((item) => (
-            <article key={item.title} className="portfolio-card">
+            <article key={item.title} className="card col-12 col-lg-3">
+              <div className='card-body'>
               <img src={item.image} alt={item.title} />
               <div className="portfolio-overlay">
                 <span>{item.category}</span>
                 <h3>{item.title}</h3>
+              </div>
               </div>
             </article>
           ))}
