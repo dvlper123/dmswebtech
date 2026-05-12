@@ -58,7 +58,7 @@ function Home() {
 
   return (
     <div className="page home-page">
-      <section className="row">
+      <section className="row p-5">
         <div className="hero-copy col-lg-6 col-12">
           <span className="eyebrow">Digital transformation for forward-thinking brands</span>
           <h1>{heroTitle}</h1>
