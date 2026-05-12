@@ -81,7 +81,7 @@ function Home() {
       </section>
 
       <section className="services-grid-section">
-        <div className="section-heading">
+        <div className="section-heading px-3">
           <span className="eyebrow">Our Services</span>
           <h2>Strategic services designed to elevate your presence.</h2>
         </div>
