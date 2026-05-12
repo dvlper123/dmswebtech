@@ -58,8 +58,8 @@ function Home() {
 
   return (
     <div className="page home-page">
-      <section className="hero-section">
-        <div className="hero-copy">
+      <section className="hero-section row">
+        <div className="hero-copy col-lg-6 col-12">
           <span className="eyebrow">Digital transformation for forward-thinking brands</span>
           <h1>{heroTitle}</h1>
           <p>{heroSubtitle}</p>
@@ -68,7 +68,7 @@ function Home() {
             <Link to="/services" className="button button-outline">Explore Services</Link>
           </div>
         </div>
-        <div className="hero-visual">
+        <div className="hero-visual col-lg-6 col-12">
           <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" alt="IT Company" />
         </div>
       </section>
