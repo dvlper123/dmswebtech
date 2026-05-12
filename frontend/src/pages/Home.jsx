@@ -59,7 +59,7 @@ function Home() {
     <div className="page home-page primary">
       <section className="hero-section">
         <div className="hero-copy">
-          <span className="eyebrow">Digital transformation for forward-thinking brands</span>
+          <span className="eyebrow text-danger">Digital transformation for forward-thinking brands</span>
           <h1>{heroTitle}</h1>
           <p>{heroSubtitle}</p>
           <div className="hero-actions">
