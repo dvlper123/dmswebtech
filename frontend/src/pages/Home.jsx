@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCompanyInfo, getServices, getTestimonials } from '../api.js';
-
+import '../bs.css'
 const portfolioItems = [
   {
     title: 'Enterprise Platform',
@@ -56,7 +56,7 @@ function Home() {
   const heroSubtitle = companyInfo?.hero_subtitle || 'From website development and mobile apps to marketing campaigns and brand design, we make your online journey elegant, scalable and profitable.';
 
   return (
-    <div className="page home-page">
+    <div className="page home-page primary">
       <section className="hero-section">
         <div className="hero-copy">
           <span className="eyebrow">Digital transformation for forward-thinking brands</span>
