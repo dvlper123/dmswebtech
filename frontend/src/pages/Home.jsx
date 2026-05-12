@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCompanyInfo, getServices, getTestimonials } from '../api.js';
-import './bs.css';
+import '../bs.css';
 const portfolioItems = [
   {
     title: 'Enterprise Platform',
