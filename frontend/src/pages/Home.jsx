@@ -115,7 +115,7 @@ function Home() {
           {portfolioItems.map((item) => (
             <article key={item.title} className="card col-12 col-lg-3">
               <div className='card-body'>
-              <img src={item.image} alt={item.title} />
+              <img src={item.image} alt={item.title} className='img-fluid' />
               <div className="portfolio-overlay">
                 <span>{item.category}</span>
                 <h3>{item.title}</h3>
