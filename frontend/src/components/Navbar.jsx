@@ -15,9 +15,9 @@ function Navbar() {
     <header className="site-header">
       <div className="brand-wrap">
         <Link to="/" className="brand-link">
-          <div className="brand-mark">DA</div>
+          <div className="brand-mark">DMS</div>
           <div>
-            <span>Digital Apex</span>
+            <span>DMS Web Tech</span>
             <small>IT Solutions</small>
           </div>
         </Link>
