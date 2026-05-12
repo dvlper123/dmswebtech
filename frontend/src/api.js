@@ -18,7 +18,7 @@ async function fetchJson(path, options = {}) {
 }
 
 export function getServices() {
-  return fetchJson(`${API_ROOT}/services/`);
+  return fetchJson(`${API_ROOT}/api/services/`);
 }
 
 export function getServiceBySlug(slug) {
